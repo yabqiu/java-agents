@@ -1,0 +1,62 @@
+= Java 1.5 Agent Example
+
+This is an example of Java 1.5 Agent implementation
+
+In class file `TransClass.java`, compile to get `TransClass.class` when `return 1`; compile to get `TransClass.class.2` when `return 2`.
+
+----
+javac -cp .:$JAVA_HOME/lib/tools.jar Transformer.java AgentMain.java AttachThread.java Client.java
+----
+
+Get `Transformer.class`, `AgentMain.class`, AttachThread.class, and `Client.class`
+
+Create our own manifest file, `manifest.mf`
+
+----
+Manifest-Version: 1.0
+Agent-Class: AgentMain
+Can-Retransform-Classes: true
+----
+
+Generate test-agent.jar package
+----
+jar cvfm test-agent.jar manifest.mf AgentMain.class Transformer.class
+----
+
+View MANIFEST.MF content in jar package
+----
+$ unzip -qc test-agent.jar META-INF/MANIFEST.MF
+
+Manifest-Version: 1.0
+Agent-Class: AgentMain
+Created-By: 1.8.0_102 (Oracle Corporation)
+------
+
+Execute `AttachThread`
+----
+java -cp .:$JAVA_HOME/lib/tools.jar AttachThread
+----
+
+Execute `Client`
+----
+java -cp . Client
+1
+1
+1
+objc[55763]: Class JavaLaunchHelper is implemented in both /Library/Java/JavaVirtualMachines/jdk1.8.0_102.jdk/Contents/Home/bin/java (0x10c7f14c0) and /Library/Java/JavaVirtualMachines/jdk1.8.0_102.jdk/Contents/Home/jre/lib/libinstrument.dylib (0x1177984e0). One of the two will be used. Which one is undefined.
+Agent Main Done
+2
+2
+2
+2
+2
+2
+2
+2
+----
+
+The output `objc[55763]: Class JavaLaunchHelper is implemented` is a issue on Mac OS X, however it reveal that agent is introduced.
+
+We don't use `-javaagent:test-agent.jar` to start `Client` since `AttachThread` knows how/where to load `test-agent.jar`.
+
+

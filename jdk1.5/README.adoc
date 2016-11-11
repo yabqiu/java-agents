@@ -1,0 +1,45 @@
+= Java 1.5 Agent Example
+
+This is an example of Java 1.5 Agent implementation
+
+In class file `TransClass.java`, compile to get `TransClass.class` when `return 1`; compile to get `TransClass.class.2` when `return 2`.
+
+----
+javac Transformer.java Premain.java Client.java
+----
+
+Get `Transformer.class`, `Premain.class`, and `Client.class`
+
+Create our own manifest file, `manifest.mf`
+
+----
+Manifest-Version: 1.0
+Premain-Class: Premain
+----
+
+Generate test-agent.jar package
+----
+jar cvfm test-agent.jar manifest.mf Premain.class Transformer.class
+----
+
+View MANIFEST.MF content in jar package
+----
+$ unzip -qc test-agent.jar META-INF/MANIFEST.MF
+
+Manifest-Version: 1.0
+Premain-Class: Premain
+Created-By: 1.8.0_102 (Oracle Corporation)
+------
+
+Execute `Client`
+----
+java -cp . Client
+1
+----
+
+----
+java -javaagent:test-agent.jar -cp . Client
+2
+----
+
+

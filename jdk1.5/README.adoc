@@ -2,8 +2,17 @@
 
 This is an example of Java 1.5 Agent implementation
 
-In class file `TransClass.java`, compile to get `TransClass.class` when `return 1`; compile to get `TransClass.class.2` when `return 2`.
+In class file `TransClass.java`, when `return 2`, compile and rename the class file to `TransClass.class.2`
+----
+javac TransClass.java; mv TransClass.class TransClass.class.2
+----
 
+Change class `TransClass.java` to `return 1`, compile to get `TransClass.class`
+----
+javac TransClass.java
+----
+
+Compile other classes
 ----
 javac Transformer.java Premain.java Client.java
 ----
@@ -41,5 +50,3 @@ java -cp . Client
 java -javaagent:test-agent.jar -cp . Client
 2
 ----
-
-

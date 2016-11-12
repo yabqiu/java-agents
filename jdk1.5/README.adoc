@@ -10,33 +10,33 @@ javac Transformer.java Premain.java Client.java
 
 Get `Transformer.class`, `Premain.class`, and `Client.class`
 
-Create our own manifest file, `manifest.mf`
-
+.Create our own manifest file, `manifest.mf`
 ----
 Manifest-Version: 1.0
 Premain-Class: Premain
 ----
 
-Generate test-agent.jar package
+.Generate test-agent.jar package
 ----
 jar cvfm test-agent.jar manifest.mf Premain.class Transformer.class
 ----
 
-View MANIFEST.MF content in jar package
+.View MANIFEST.MF content in jar package
 ----
 $ unzip -qc test-agent.jar META-INF/MANIFEST.MF
 
 Manifest-Version: 1.0
 Premain-Class: Premain
 Created-By: 1.8.0_102 (Oracle Corporation)
-------
+----
 
-Execute `Client`
+.Execute `Client` without agent
 ----
 java -cp . Client
 1
 ----
 
+.Execute `Client` with agent
 ----
 java -javaagent:test-agent.jar -cp . Client
 2
